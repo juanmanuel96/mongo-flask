@@ -24,22 +24,12 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 from .about import __version__
-from flask import Flask
 from .mongo import MongoFlask
-from .helpers import current_db
+# from .helpers import current_db
 
-app = Flask(__name__)
-app.config['MONGO_HOST'] = '127.0.0.1'
-app.config['MONGO_PORT'] = '27017'
-
-mongo_db = MongoFlask(app)
-mongo_db.set_Database('pyregister')
-mongo_db.set_Collection('users')
-
-for item in app.mongo_flask.collection.find():
-    # print(item)
-    pass
-
-print(current_db)
-
-# __all__ = ('MongoFlask', 'ASCENDING', 'DESCENDING')
+__all__ = (
+    MongoFlask.__name__, 
+    'ASCENDING', 
+    'DESCENDING',
+    __version__
+    )

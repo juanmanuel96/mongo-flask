@@ -12,8 +12,8 @@ class MongoFlask(object):
             self.init_app(app, add_context_processor = True)
 
     def init_app(self, app, db_name = None, add_context_processor = True):
-        host = app.config.get('MONGO_HOST', None)
-        port = app.config.get('MONGO_PORT', None)
+        host = app.config.get('MONGO_HOST', 'localhost')
+        port = app.config.get('MONGO_PORT', '27017')
         username = app.config.get('MONGO_USER', None)
         pwd = app.config.get('MONGO_PWD', None)
         if username is None:
@@ -32,9 +32,11 @@ class MongoFlask(object):
 
     def set_Database(self, db_name):
         self.db = MongoDatabase(self.client, db_name)
+        return self.db
     
     def set_Collection(self, collection_name):
         self.collection = MongoCollection(self.db, collection_name)
+        return self.collection
     
     def _update_request_context_with_db(self, db=None):
         ctx = _request_ctx_stack.top
