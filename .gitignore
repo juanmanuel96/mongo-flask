@@ -3,3 +3,4 @@ mongo_flask/__pycache__/__init__.cpython-37.pyc
 mongo_flask/__pycache__/about.cpython-37.pyc
 mongo_flask/__pycache__/wrappers.cpython-37.pyc
 mongo_flask/__pycache__/helpers.cpython-37.pyc
+mongo_flask/__pycache__/expections.cpython-37.pyc

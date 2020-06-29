@@ -1,5 +1,5 @@
 # Mongo-Flask
-A Python Flask library for connecting a MongoDB instance to the application.
+A Python Flask library for connecting a MongoDB instance to the Flask application.
 
 ## Why I made this package
 This package was inspired by he package **[Flask-PyMongo](https://github.com/dcrosta/flask-pymongo)** and **[Flask-Login](https://github.com/maxcountryman/flask-login)**. I wanted to create package which would connect a Flask application to a MongoDB instance and have a proxy class like `current_app` from Flask or `current_user` from Flask-Login to make use of the DB from anywhere in the application. The latter is still in development.
@@ -11,8 +11,8 @@ Module is not available in pip yet. You will need to download the source code. C
 Upon creation of the application, you need to set the following application config variables:
 1. MONGO_USER = MongoDB connection username (optional)
 2. MONGO_PWD = MongoDB connection password (optional)
-3. MONGO_HOST = MongoDB connection host IP or domain. Defaults to 'localhost'
-4. MONGO_PORT = MongoDB connection port. Defaults to '27017'
+3. MONGO_HOST = MongoDB connection host IP or domain. **Required**
+4. MONGO_PORT = MongoDB connection port. **Required**
 
 ### Client Instantiation
 After application instantiation and setting configurations, instantiate your MongoDB client as follows:
@@ -21,23 +21,35 @@ from .mongo_flask import MongoFlask
 mongo_flask = MongoFlask(app) # Set the MongoFlask client instance
 mongo_flask.set_Database(db_name='db_name') # Set the database attribute
 ```
+You may also do as follows:
+```python
+from .mongo_flask import MongoFlask
+mongo_flask = MongoFlask(app, 'db_name') # Sets client instance and DB instance
+```
 
 ### How to use the Database attribute
 Now that the client has bee instantiated, the next step is to use the database attribute to call collections. To use the database attribute, do as follows:
 ```python
 from flask import current_app
 
-collection = current_app.mongo_flask.database['collection']
+collection = current_app.mongo.database['collection']
 docs = collection.find()
 ```
 
-### Another method to set and use collections
-Another method to set the Collection to use at the moment, do as follows:
+### Methods to get a Collection
+The MongoFlask instance has an attribute called collections. This attribute is a dictionary where the keys
+are the collection names and their values are the Collection instances. To use the methods on the Collection
+class, retrieve the Collection instance the same way your would retrieve the value of a key froma disctionary.
+For example:
 ```python
 from flask import current_app
 
-collection = current_app.mongo_flask.set_Collection(collection_name='collection')
+collection = current_app.mongo.collections.get('collction_name')
 docs = collection.find()
 ```
-It is not recommended to do this in the `__init__.py` file because the Collection 
-can change from operation to operation.
+Another method:
+```python
+from flask import current_app
+collection = current_app.mongo.get_collection('collection_name')
+docs = collection.find()
+```
