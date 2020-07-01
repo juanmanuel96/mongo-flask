@@ -110,7 +110,7 @@ class MongoFlask(object):
                 self.collections[collection_name] = MongoCollection(self.db, collection_name, create=True)
             except OperationFailure:
                 self.collections[collection_name] = MongoCollection(self.db, collection_name)
-        return self.collections
+            return True
     
     def get_collection(self, collection_name = None):
         """
