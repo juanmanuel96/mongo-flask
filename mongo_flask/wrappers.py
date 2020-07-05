@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 from pymongo.database import Database
 from pymongo.collection import Collection
+from pymongo import DESCENDING, ASCENDING
 from .exceptions import MissingAmount
 
 class MongoConnect(MongoClient):
@@ -58,10 +59,7 @@ class MongoCollection(Collection):
         Returns a list of the pymongo cursor
         """
         cursor = self.find(*args, **kwargs)
-        if len(cursor) == 0:
-            return []
-        else:
-            return list(cursor)
+        return list(cursor)
     
     def find_first_amount(self, amount = None, *args, **kwargs):
         """

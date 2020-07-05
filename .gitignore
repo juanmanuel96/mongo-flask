@@ -8,3 +8,4 @@ mongo_flask/about.pyc
 mongo_flask/__init__.pyc
 mongo_flask/exceptions.pyc
 mongo_flask/__pycache__/exceptions.cpython-37.pyc
+__pycache__/tester.cpython-37-pytest-5.4.3.pyc
