@@ -31,6 +31,7 @@ if sys.version_info.major != __py_version__:
     raise PyVersionInvalid()
 
 from .mongo import MongoFlask
+from .wrappers import ASCENDING, DESCENDING
 
 __all__ = (
     MongoFlask.__name__, 

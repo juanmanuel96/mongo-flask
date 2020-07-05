@@ -1,0 +1,23 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.7.4, pytest-5.4.3, py-1.9.0, pluggy-0.13.1 -- /Users/juanvazquez/PythonProjects/MongoFlask/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask
+collecting ... collected 15 items
+
+tester.py::test_missing_complete_uri PASSED                              [  6%]
+tester.py::test_missing_host PASSED                                      [ 13%]
+tester.py::test_missing_port PASSED                                      [ 20%]
+tester.py::test_missing_database PASSED                                  [ 26%]
+tester.py::test_app_mongo PASSED                                         [ 33%]
+tester.py::test_client_type PASSED                                       [ 40%]
+tester.py::test_database_type PASSED                                     [ 46%]
+tester.py::test_collection_type PASSED                                   [ 53%]
+tester.py::test_get_collection PASSED                                    [ 60%]
+tester.py::test_get_collection_fail PASSED                               [ 66%]
+tester.py::test_insert_collection PASSED                                 [ 73%]
+tester.py::test_list_find PASSED                                         [ 80%]
+tester.py::test_find_amount_0 PASSED                                     [ 86%]
+tester.py::test_find_amount_1 PASSED                                     [ 93%]
+tester.py::test_descending_sorting PASSED                                [100%]
+
+============================== 15 passed in 0.73s ==============================
