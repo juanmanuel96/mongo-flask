@@ -1,8 +1,7 @@
 from pymongo import MongoClient
 from pymongo.database import Database
 from pymongo.collection import Collection
-from pymongo import DESCENDING, ASCENDING
-from .exceptions import MissingAmount
+
 
 class MongoConnect(MongoClient):
     """
@@ -20,6 +19,7 @@ class MongoConnect(MongoClient):
             return MongoDatabase(self, item)
         return attr
 
+
 class MongoDatabase(Database):
     """
     Wrapper for the pymongo.database.Database class
@@ -35,6 +35,7 @@ class MongoDatabase(Database):
         if isinstance(item_, Collection):
             return MongoCollection(self, item)
         return item_
+
 
 class MongoCollection(Collection):
     """
@@ -58,21 +59,22 @@ class MongoCollection(Collection):
         """
         Returns a list of the pymongo cursor
         """
-        cursor = self.find(*args, **kwargs)
+        cursor = super().find(*args, **kwargs)
         return list(cursor)
     
-    def find_first_amount(self, amount = None, *args, **kwargs):
+    def find_limit(self, limit, *args, **kwargs):
         """
         Returns a list of the first docs found. The amount returned will be set
-        by `amonut`.
+        by `limit`.
 
-        :param amount: The number of the first documents to retrieved from the entire collection
-        :type amount: int
+        :param limit: The number of the first documents to retrieved from the entire collection
+        :type limit: int
         """
-        if amount is None:
-            raise MissingAmount()
-        else:
-            amount = int(amount)
-            cursor = self.find(*args, **kwargs)
-            first_amount = [next(cursor) for _ in range(amount)]
-            return first_amount
+        int(limit)
+        cursor = super().find(*args, **kwargs)
+        total = [next(cursor) for _ in range(limit)]
+        return total
+
+    def find_one(self, session=None, **kwargs):
+        _filter = {}.update(**kwargs)
+        return super().find_one(_filter, session=session)

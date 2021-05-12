@@ -2,8 +2,9 @@ from .wrappers import MongoConnect, MongoDatabase, MongoCollection
 from .exceptions import CollectionException, CollectionInvalid, URIMissing, DatabaseException
 from pymongo.errors import OperationFailure
 
+
 class MongoFlask(object):
-    def __init__(self, app = None):
+    def __init__(self, app=None):
         """
         # MongoFlask
         Connect a Flask application to your MongoDB client. The MongoFlask object 
@@ -29,9 +30,9 @@ class MongoFlask(object):
         |v0.01  |Initial release of API|
         |v0.02  |Changes for ease of use|
         """
-        self.client = None # MongoDB client
-        self.db = None # Application database
-        self.collections = {} # Database collections
+        self.client = None  # MongoDB client
+        self.db = None  # Application database
+        self.collections = {}  # Database collections
 
         if app is not None:
             # App is initialized if sent as parameter else, init_app 
@@ -48,26 +49,22 @@ class MongoFlask(object):
         :param app: Flask instance of the application
         :type app: Flask
         """
-        host = app.config.get('MONGO_HOST', None)
-        port = app.config.get('MONGO_PORT', None)
+        host = app.config.get('MONGO_HOST', 'localhost')
+        port = app.config.get('MONGO_PORT', 27017)
         username = app.config.get('MONGO_USER', None)
         pwd = app.config.get('MONGO_PWD', None)
         db_name = app.config.get('MONGO_DATABASE', None)
+
+        account = f'{username}:{pwd}@' if username and pwd else ''
+        conn = f'{host}:{port}'
+        uri = f'mongodb://{account}{conn}'
         
-        if host is None or port is None:
-            raise URIMissing()
-        else:
-            if username is None and pwd is None:
-                connect = f'mongodb://{host}:{port}'
-            else:
-                connect = f'mongodb://{username}:{pwd}@{host}:{port}'
-        
-        self.client = MongoConnect(connect)
+        self.client = MongoConnect(uri)
         self.__database__(db_name)
         
         app.mongo = self # Create mongo attribute in Flask instance
 
-    def __database__(self, db_name = None):
+    def __database__(self, db_name=None):
         """
         Sets the db attribute of the object.
 
@@ -76,9 +73,9 @@ class MongoFlask(object):
         """
         if db_name is None:
             raise DatabaseException()
-        else:
-            self.db = MongoDatabase(self.client, db_name)
-            self.collections = self.__collections__()
+
+        self.db = MongoDatabase(self.client, db_name)
+        self.collections = self.__collections__()
     
     def __collections__(self):
         """
@@ -105,14 +102,14 @@ class MongoFlask(object):
         """
         if collection_name is None:
             raise CollectionException()
-        else:
-            try:
-                self.collections[collection_name] = MongoCollection(self.db, collection_name, create=True)
-            except OperationFailure:
-                self.collections[collection_name] = MongoCollection(self.db, collection_name)
-            return True
+
+        try:
+            self.collections[collection_name] = MongoCollection(self.db, collection_name, create=True)
+        except OperationFailure:
+            self.collections[collection_name] = MongoCollection(self.db, collection_name)
+        return True
     
-    def get_collection(self, collection_name = None):
+    def get_collection(self, collection_name=None) -> MongoCollection:
         """
         Retrieves a Collection instance from the collections attribute.
 
@@ -121,8 +118,11 @@ class MongoFlask(object):
         """
         if collection_name is None:
             raise CollectionException()
+
+        if self.collections.get(collection_name) is None:
+            raise CollectionInvalid()
         else:
-            if self.collections.get(collection_name) is None:
-                raise CollectionInvalid()
-            else:
-                return self.collections.get(collection_name)
+            return self.collections.get(collection_name)
+
+    def start_session(self, causal_consistency=True, default_transaction_options=None):
+        return self.client.start_session(causal_consistency, default_transaction_options)

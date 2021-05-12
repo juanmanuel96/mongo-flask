@@ -8,4 +8,10 @@ app.config['MONGO_DATABASE'] = 'mongo_flask'
 
 mongo = MongoFlask(app)
 
-print(mongo.collections)
+col = mongo.get_collection('testing')
+docs = col.list_find()
+
+with mongo.start_session() as session:
+    one_doc = col.find_one(doc_num='doc0', session=session)
+    print(one_doc)
+
