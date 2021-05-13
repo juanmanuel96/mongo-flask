@@ -54,27 +54,3 @@ class MongoCollection(Collection):
             db = self._Collection__database
             return MongoCollection(db, item_.name)
         return item_
-    
-    def list_find(self, *args, **kwargs):
-        """
-        Returns a list of the pymongo cursor
-        """
-        cursor = super().find(*args, **kwargs)
-        return list(cursor)
-    
-    def find_limit(self, limit, *args, **kwargs):
-        """
-        Returns a list of the first docs found. The amount returned will be set
-        by `limit`.
-
-        :param limit: The number of the first documents to retrieved from the entire collection
-        :type limit: int
-        """
-        int(limit)
-        cursor = super().find(*args, **kwargs)
-        total = [next(cursor) for _ in range(limit)]
-        return total
-
-    def find_one(self, session=None, **kwargs):
-        _filter = {}.update(**kwargs)
-        return super().find_one(_filter, session=session)
