@@ -69,3 +69,18 @@ class ValidatorsException(BaseMongoException):
     status_code = 7
     message = 'This validator is not a callable function'
     fix = 'Validators must be a list of functions'
+
+
+class MissingFieldsException(BaseMongoException):
+    status_code = 8
+    message = '{collection} class is missing fields'
+    fix = 'Add fields to {collection} class'
+
+    def __init__(self, collection_cls=None):
+        if collection_cls:
+            self.message.format(collection=collection_cls)
+            self.fix.format(collection=collection_cls)
+        else:
+            self.message.format(collection='Collection')
+            self.fix.format(collection='Collection')
+        super().__init__()

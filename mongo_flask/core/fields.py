@@ -1,5 +1,13 @@
-from .validators import validate_int
+from .validators import validate_int, validate_str
 from ..errors import ValidatorsException, ValidationError
+
+
+def extra_validators(validators, **kwargs):
+    _validators = []
+    if kwargs.get('validators'):
+        _validators += kwargs['validators']
+        kwargs.pop('validators')
+    return kwargs
 
 
 class ErrorDetail:
@@ -15,10 +23,10 @@ class ErrorDetail:
 
 
 class BaseField:
-    def __init__(self, *, required=False, validators=()):
+    def __init__(self, *, data=None, required=False, validators=()):
         self.required = required
         self.validators = validators
-        self.data = None
+        self.data = data
         self.errors = []
 
     def validate(self):
@@ -32,8 +40,10 @@ class BaseField:
 
 
 class StringField(BaseField):
-    def __init__(self, *, min_length=None, max_length=None, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, *, min_length=1, max_length=255, **kwargs):
+        # kwargs = extra_validators(**kwargs)
+
+        super().__init__(validators=[validate_str], **kwargs)
         self.min_length = min_length
         self.max_length = max_length
 
@@ -47,11 +57,8 @@ class StringField(BaseField):
 
 class IntegerField(BaseField):
     def __init__(self, **kwargs):
-        extra_validators = []
-        if kwargs.get('validators'):
-            extra_validators += kwargs['validators']
-            kwargs.pop('validators')
+        # kwargs = extra_validators(**kwargs)
 
-        super().__init__(validators=[validate_int])
+        super().__init__(validators=[validate_int], **kwargs)
         if extra_validators:
             self.validators += extra_validators

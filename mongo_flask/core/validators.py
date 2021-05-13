@@ -17,7 +17,7 @@ def validate_float(value):
         )
 
 
-def validate_is_str(value):
+def validate_str(value):
     if not isinstance(value, str):
         raise ValidationError(
             message=f'Value is of type {type(value)} and should be str',
