@@ -26,8 +26,16 @@ class BaseField:
     def __init__(self, *, data=None, required=False, validators=()):
         self.required = required
         self.validators = validators
-        self.data = data
+        self.__data = data
         self.errors = []
+
+    @property
+    def data(self):
+        return self.__data
+
+    @data.setter
+    def data(self, value):
+        self.__data = value
 
     def validate(self):
         for validator in self.validators:
@@ -37,6 +45,8 @@ class BaseField:
                 validator(self.data)
             except ValidationError as err:
                 self.errors.append(ErrorDetail(**err.exception_data))
+
+
 
 
 class StringField(BaseField):

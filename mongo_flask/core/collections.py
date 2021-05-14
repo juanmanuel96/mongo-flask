@@ -1,6 +1,6 @@
 from bson import ObjectId
 from .wrappers import MongoCollection
-from .document import Document
+from .document import Document, DocumentSet
 from .fields import BaseField
 from ..errors import MissingFieldsException, CollectionException
 
@@ -36,7 +36,7 @@ class BaseCollection(MongoCollection):
     collection_name = None
     __id = ObjectId()
 
-    def __init__(self, database, collection_name, **kwargs):
+    def __init__(self, database, **kwargs):
         if not self.collection_name:
             raise CollectionException()
         super().__init__(database, self.collection_name, **kwargs)
@@ -45,7 +45,7 @@ class BaseCollection(MongoCollection):
 
     def __set_base_fields__(self):
         base_fields = BaseFields()
-        non_dunder = [simple for simple in dir(self) if not simple.startswith('__') and not simple.startswith('_')]
+        non_dunder = [simp for simp in dir(self) if not simp.startswith('__') and not simp.startswith('_')]
 
         for name in non_dunder:
             class_attr = getattr(self, name)
@@ -60,16 +60,35 @@ class BaseCollection(MongoCollection):
     def __str__(self):
         return self.__class__
 
-    # @property
-    # def collection_name(self):
-    #     return self.__collection_name
+    def _save(self):
+        pass
 
-    def list_find(self, *args, **kwargs):
-        """
-        Returns a list of the pymongo cursor
-        """
-        cursor = super().find(*args, **kwargs)
-        return list(cursor)
+    def _set_document_fields(self, **_document) -> Document:
+        _doc = {}
+        for field in self.base_fields:
+            name = list(field.keys())[0]
+            field_class = list(field.values())[0]
+            field_class.data = _document.get(name)  # Set the data of the field
+            _doc.update({name: field_class})
+        return Document(**_doc)
+
+    @property
+    def is_valid(self):
+        return not self.errors
+
+    def find(self, *args, **kwargs):
+        raise AttributeError(f'{self} does not have attribute find')
+
+    # def list_find(self, *args, **kwargs):
+    #     """
+    #     Returns a list of the pymongo cursor
+    #     """
+    #     docu_set = DocumentSet()
+    #     cursor = super().find(*args, **kwargs)
+    #     for document in cursor:
+    #         _document = self._set_document_fields(**document)
+    #         docu_set.append(_document)
+    #     return docu_set
 
     def find_limit(self, limit, *args, **kwargs):
         """
@@ -79,45 +98,41 @@ class BaseCollection(MongoCollection):
         :param limit: The number of the first documents to retrieved from the entire collection
         :type limit: int
         """
+        docu_set = DocumentSet()
         int(limit)
         cursor = super().find(*args, **kwargs)
-        total = [next(cursor) for _ in range(limit)]
-        return total
+        for idx, document in enumerate(cursor):
+            _document = self._set_document_fields(**document)
+            docu_set.append(_document)
+            if idx + 1 == limit:
+                break
+        return docu_set
 
     def all(self):
-        return super().find()
+        docu_set = DocumentSet()
+        cursor = super().find()
+        for document in cursor:
+            _document = self._set_document_fields(**document)
+            docu_set.append(_document)
+        return docu_set
 
     def filter(self, **kwargs):
-        return super().find(**kwargs)
-
-    def _get(self, **document):
-        pass
+        docu_set = DocumentSet()
+        cursor = super().find(**kwargs)
+        for document in cursor:
+            _document = self._set_document_fields(**document)
+            docu_set.append(_document)
+        return docu_set
 
     def get(self, **kwargs) -> Document:
-        _filter = {}.update(**kwargs)
+        _filter = dict(**kwargs)
         with self.__client__session__() as session:
             _document = super().find_one(_filter, session=session)
         document = self._set_document_fields(**_document)
         return document
 
-    def _save(self):
-        pass
-
     def save(self):
         pass
-
-    def _set_document_fields(self, **_document) -> Document:
-        _doc = {}
-        for field in self.base_fields:
-            name = field.keys()[0]
-            field_class = field.values()[0]
-            document_field = field_class(data=_document.get(name))
-            _doc.update({name: document_field})
-        return Document(**_doc)
-
-    @property
-    def is_valid(self):
-        return not self.errors
 
 
 class CollectionModel(BaseCollection):

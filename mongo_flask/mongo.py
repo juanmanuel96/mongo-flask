@@ -103,9 +103,9 @@ class MongoFlask(object):
         exists, it is created.
         """
         try:
-            _collection = collection_cls(self.db, name, create=True)
+            _collection = collection_cls(self.db, create=True)
         except OperationFailure:
-            _collection = collection_cls(self.db, name)
+            _collection = collection_cls(self.db)
         self.__collections.update({name: _collection})
         return _collection, self.collections.get(name) is not None
 
