@@ -79,17 +79,6 @@ class BaseCollection(MongoCollection):
     def find(self, *args, **kwargs):
         raise AttributeError(f'{self} does not have attribute find')
 
-    # def list_find(self, *args, **kwargs):
-    #     """
-    #     Returns a list of the pymongo cursor
-    #     """
-    #     docu_set = DocumentSet()
-    #     cursor = super().find(*args, **kwargs)
-    #     for document in cursor:
-    #         _document = self._set_document_fields(**document)
-    #         docu_set.append(_document)
-    #     return docu_set
-
     def find_limit(self, limit, *args, **kwargs):
         """
         Returns a list of the first docs found. The amount returned will be set

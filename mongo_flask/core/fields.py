@@ -2,14 +2,6 @@ from .validators import validate_int, validate_str
 from ..errors import ValidatorsException, ValidationError
 
 
-def extra_validators(validators, **kwargs):
-    _validators = []
-    if kwargs.get('validators'):
-        _validators += kwargs['validators']
-        kwargs.pop('validators')
-    return kwargs
-
-
 class ErrorDetail:
     def __init__(self, **details):
         self.message = details.get('message', 'No message provided')
@@ -25,7 +17,7 @@ class ErrorDetail:
 class BaseField:
     def __init__(self, *, data=None, required=False, validators=()):
         self.required = required
-        self.validators = validators
+        self.validators = list(validators)
         self.__data = data
         self.errors = []
 
@@ -38,6 +30,9 @@ class BaseField:
         self.__data = value
 
     def validate(self):
+        pass
+
+    def run_validators(self):
         for validator in self.validators:
             if not callable(validator):
                 raise ValidatorsException()
@@ -47,17 +42,14 @@ class BaseField:
                 self.errors.append(ErrorDetail(**err.exception_data))
 
 
-
-
 class StringField(BaseField):
     def __init__(self, *, min_length=1, max_length=255, **kwargs):
-        # kwargs = extra_validators(**kwargs)
-
-        super().__init__(validators=[validate_str], **kwargs)
+        super().__init__(**kwargs)
         self.min_length = min_length
         self.max_length = max_length
+        self.validators.append(validate_str)
 
-    def __validate_lengths__(self):
+    def validate_length(self):
         if len(self.data) <= self.min_length or len(self.data) >= self.max_length:
             raise ValidationError(
                 message=f'Length of data must be between {self.min_length} and {self.max_length}',
@@ -67,8 +59,5 @@ class StringField(BaseField):
 
 class IntegerField(BaseField):
     def __init__(self, **kwargs):
-        # kwargs = extra_validators(**kwargs)
-
         super().__init__(validators=[validate_int], **kwargs)
-        if extra_validators:
-            self.validators += extra_validators
+        self.validators.append(validate_int)

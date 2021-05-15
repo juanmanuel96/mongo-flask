@@ -115,6 +115,7 @@ class MongoFlask(object):
             current_app.mongo = self
         except RuntimeError as run_err:
             """This app is not a Flask app, continuing without problems"""
+            pass
         except Exception as err:
             """Something else happened, figure it out"""
     
