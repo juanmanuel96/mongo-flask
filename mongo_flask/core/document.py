@@ -1,13 +1,10 @@
 from bson import ObjectId
 
 
-class Document:
-    __id = ObjectId()
-
+class Document(dict):
     def __init__(self, **kwargs):
-        if kwargs:
-            for name, field in kwargs.items():
-                setattr(self, name, field)
+        self.__id = ObjectId()
+        super().__init__(**kwargs)
 
     @property
     def _id(self):
