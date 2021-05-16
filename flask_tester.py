@@ -21,5 +21,5 @@ class Testing(CollectionModel):
 mongo.register_collection(Testing)
 collection = mongo.get_collection('testing')
 
-doc_found = collection.find_limit(limit=5)
+doc_found = collection.get(doc_num='doc0')
 print(doc_found)

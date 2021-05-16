@@ -84,3 +84,18 @@ class MissingFieldsException(BaseMongoException):
             self.message.format(collection='Collection')
             self.fix.format(collection='Collection')
         super().__init__()
+
+
+class InvalidClass(BaseMongoException):
+    status_code = 9
+    message = '{invalid_class} is not a valid class'
+    fix = 'Create a class that inherits from CollectionModel'
+
+    def __init__(self, invalid_class):
+        self.message.format(invalid_class=invalid_class.__class__)
+
+
+class RegistrationException(BaseMongoException):
+    status_code = 10
+    message = 'Unable to register collection'
+    fix = 'Try again later'

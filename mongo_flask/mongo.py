@@ -3,7 +3,7 @@ from pymongo.errors import OperationFailure
 
 from .core.wrappers import MongoConnect, MongoDatabase
 from .core.collections import CollectionModel
-from .errors import DatabaseException, CollectionException, CollectionInvalid
+from .errors import DatabaseException, CollectionException, CollectionInvalid, InvalidClass, RegistrationException
 
 
 class MongoFlask(object):
@@ -25,7 +25,7 @@ class MongoFlask(object):
         self.__db = None  # Application database
         self.__collections = {}  # Database collections
 
-        if app is not None:
+        if app:
             # App is initialized if sent as parameter else, init_app 
             # has to be called
             self.init_app(app)
@@ -87,14 +87,14 @@ class MongoFlask(object):
         if issubclass(collection_cls, CollectionModel):
             self.__register_collection(collection_cls)
         else:
-            raise Exception('Only Collection classes are valid')
+            raise InvalidClass(collection_cls)
 
     def __register_collection(self, collection_cls):
         _name = collection_cls.collection_name
         _collection, success = self.__insert_collections__(_name, collection_cls)
         _collection.__client__session__ = self.__client.start_session
         if not success:
-            raise Exception('Something happened')
+            raise RegistrationException()
         self.__update_app()
 
     def __insert_collections__(self, name, collection_cls: CollectionModel):
@@ -116,8 +116,6 @@ class MongoFlask(object):
         except RuntimeError as run_err:
             """This app is not a Flask app, continuing without problems"""
             pass
-        except Exception as err:
-            """Something else happened, figure it out"""
     
     def get_collection(self, collection_name=None) -> CollectionModel:
         """

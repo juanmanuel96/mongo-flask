@@ -76,9 +76,6 @@ class BaseCollection(MongoCollection):
     def is_valid(self):
         return not self.errors
 
-    def find(self, *args, **kwargs):
-        raise AttributeError(f'{self} does not have attribute find')
-
     def find_limit(self, limit, *args, **kwargs):
         """
         Returns a list of the first docs found. The amount returned will be set
