@@ -60,8 +60,9 @@ class BaseCollection(MongoCollection):
     def __str__(self):
         return self.__class__
 
-    def _save(self):
-        pass
+    @property
+    def client_session(self):
+        return self.client_session
 
     def _set_document_fields(self, **_document) -> Document:
         _doc = {}
@@ -112,12 +113,44 @@ class BaseCollection(MongoCollection):
 
     def get(self, **kwargs) -> Document:
         _filter = dict(**kwargs)
-        with self.__client__session__() as session:
+        with self.client_session as session:
             _document = super().find_one(_filter, session=session)
         document = self._set_document_fields(**_document)
         return document
 
-    def save(self):
+    def insert_one(self, bypass_document_validation=False, **kwargs):
+        _filter = dict(**kwargs)
+        with self.client_session as session:
+            super().insert_one(_filter, bypass_document_validation=bypass_document_validation, session=session)
+
+    def update_one(self, document, update, **kwargs):
+        pass
+
+    def delete_one(self, document, **kwargs):
+        pass
+
+    def multiple_operation(self, pipeline=(), **kwargs):
+        """
+        This method allows the user to create a multiple operation sequence of queries. The sequence is established
+        by the pipeline. The pipeline should be a tuple of dictionaries where the key is the method (i.e. insert_one)
+        and the value are the parameters of the method.
+
+        Here is the structure for each method:
+        1) insert_one
+            {'insert_one': {'field': 'value'}}
+        2) update_one
+            {'update_one': {
+                'filter': {'my_field': 'my_value'},
+                'set' : {'my_field': 'my_value'}
+                }
+            }
+
+        How the pipeline is constructed is entirely up to the user, but the structure of the pipeline methods must
+        follow the above guidelines.
+
+        :param pipeline: Sequence of methods to run
+        :type pipeline: tuple
+        """
         pass
 
 
