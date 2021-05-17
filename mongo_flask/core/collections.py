@@ -5,7 +5,7 @@ from .fields import BaseField
 from ..errors import MissingFieldsException, CollectionException
 
 
-class BaseFields(list):
+class CollectionFields(list):
     __data = dict()
 
     def __init__(self, **kwargs):
@@ -32,7 +32,7 @@ class BaseFields(list):
 
 
 class BaseCollection(MongoCollection):
-    __client__session__ = None
+    __client_session__ = None
     collection_name = None
     __id = ObjectId()
 
@@ -44,7 +44,7 @@ class BaseCollection(MongoCollection):
         self.errors = list()
 
     def __set_base_fields__(self):
-        base_fields = BaseFields()
+        base_fields = CollectionFields()
         non_dunder = [simp for simp in dir(self) if not simp.startswith('__') and not simp.startswith('_')]
 
         for name in non_dunder:
@@ -62,7 +62,7 @@ class BaseCollection(MongoCollection):
 
     @property
     def client_session(self):
-        return self.client_session
+        return self.__client_session__
 
     def _set_document_fields(self, **_document) -> Document:
         _doc = {}
@@ -71,7 +71,7 @@ class BaseCollection(MongoCollection):
             field_class = list(field.values())[0]
             field_class.data = _document.get(name)  # Set the data of the field
             _doc.update({name: field_class})
-        return Document(**_doc)
+        return Document(self, **_doc)
 
     @property
     def is_valid(self):
@@ -112,22 +112,35 @@ class BaseCollection(MongoCollection):
         return docu_set
 
     def get(self, **kwargs) -> Document:
+        kwargs = self._remove_session(**kwargs)
         _filter = dict(**kwargs)
-        with self.client_session as session:
+        with self.client_session() as session:
             _document = super().find_one(_filter, session=session)
-        document = self._set_document_fields(**_document)
+        data = _document if _document else {}
+        document = self._set_document_fields(**data)
         return document
 
-    def insert_one(self, bypass_document_validation=False, **kwargs):
-        _filter = dict(**kwargs)
-        with self.client_session as session:
-            super().insert_one(_filter, bypass_document_validation=bypass_document_validation, session=session)
+    def insert_one(self, **kwargs):
+        kwargs = self._remove_session(**kwargs)
+        _document = dict(**kwargs)
+        with self.client_session() as session:
+            super().insert_one(document=_document, session=session, **kwargs)
 
-    def update_one(self, document, update, **kwargs):
-        pass
+    def update_one(self, _filter: dict, update: dict, **kwargs):
+        kwargs = self._remove_session(**kwargs)
+        with self.client_session() as session:
+            _update = {'$set': update}
+            super().update_one(_filter, _update, session=session, **kwargs)
 
-    def delete_one(self, document, **kwargs):
-        pass
+    def delete_one(self, document: Document, **kwargs):
+        kwargs = self._remove_session(**kwargs)
+        with self.client_session() as session:
+            super().delete_one({'_id': str(document)}, session=session, **kwargs)
+
+    def _remove_session(self, **kwargs):
+        if 'session' in kwargs.keys():
+            kwargs.pop('session')
+        return kwargs
 
     def multiple_operation(self, pipeline=(), **kwargs):
         """

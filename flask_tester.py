@@ -21,5 +21,6 @@ class Testing(CollectionModel):
 mongo.register_collection(Testing)
 collection = mongo.get_collection('testing')
 
-doc_found = collection.get(doc_num='doc0')
+doc_found = collection.get(doc_num='document1')
+doc_found.get('desc').data = 'hi'
 print(doc_found)

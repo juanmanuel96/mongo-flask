@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from .validators import validate_int, validate_str
 from ..errors import ValidatorsException, ValidationError
 
@@ -29,9 +31,6 @@ class BaseField:
     def data(self, value):
         self.__data = value
 
-    def validate(self):
-        pass
-
     def run_validators(self):
         for validator in self.validators:
             if not callable(validator):
@@ -41,9 +40,12 @@ class BaseField:
             except ValidationError as err:
                 self.errors.append(ErrorDetail(**err.exception_data))
 
+    def _get_user_field_validators(self):
+        pass
+
 
 class StringField(BaseField):
-    def __init__(self, *, min_length=1, max_length=255, **kwargs):
+    def __init__(self, *, min_length=1, max_length=128, **kwargs):
         super().__init__(**kwargs)
         self.min_length = min_length
         self.max_length = max_length
@@ -57,7 +59,22 @@ class StringField(BaseField):
             )
 
 
+class TextField(StringField):
+    def __init__(self, *, max_length=1000, **kwargs):
+        super().__init__(max_length=max_length, **kwargs)
+
+
 class IntegerField(BaseField):
     def __init__(self, **kwargs):
         super().__init__(validators=[validate_int], **kwargs)
         self.validators.append(validate_int)
+
+
+class DateField(BaseField):
+    def __init__(self, *, data=datetime(1901, 1, 1, 0, 0, 0), **kwargs):
+        if not isinstance(data, datetime):
+            raise AttributeError('Data must be of type datetime.')
+        super().__init__(data=data, **kwargs)
+
+    def to_string(self, fmt: str):
+        return self.data.strftime(fmt)
