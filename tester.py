@@ -2,7 +2,7 @@ from mongo_flask import MongoFlask, DESCENDING
 import pytest
 from flask import Flask
 from mongo_flask.exceptions import *
-from mongo_flask.wrappers import MongoConnect, MongoDatabase, MongoCollection
+from mongo_flask.wrappers import MongoConnect, MongoDatabase
 
 app = Flask(__name__)
 mongo = MongoFlask()

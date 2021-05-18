@@ -1,11 +1,9 @@
 # Mongo-Flask
 A Python Flask library for connecting a MongoDB instance to the Flask application.
 
-## Why I made this package
-This package was inspired by he package **[Flask-PyMongo](https://github.com/dcrosta/flask-pymongo)** and **[Flask-Login](https://github.com/maxcountryman/flask-login)**. I wanted to create package which would connect a Flask application to a MongoDB instance and have a proxy class like `current_app` from Flask or `current_user` from Flask-Login to make use of the DB from anywhere in the application. The latter is still in development.
-
 ## How to use
-Module is not available in pip yet. You will need to download the source code. Copy the `mongo-flask` package under `yourapplication` folder. From there on out, just call the MongoFlask class in your application.
+Module is not available in pip yet. You will need to download the source code. Copy the `mongo-flask` package 
+under `yourapplication` folder. From there on out, just call the MongoFlask class in your application.
 
 ### Application Configuration
 Upon creation of the application, you need to set the following Flask application configuration variables:
@@ -21,6 +19,13 @@ This section details a quick start to the MongoFlask class.
 ```python
 from flask import Flask, render_template
 from mongo_flask import MongoFlask
+from mongo_flask.core.collections import CollectionModel
+from mongo_flask.code.fields import StringField
+
+class MyCollection(CollectionModel):
+    collection_name = 'my_collection'
+    field1 = StringField()
+    
 
 app = Flask(__name__)
 app.config['MONGO_HOST'] = 'localhost'
@@ -28,12 +33,13 @@ app.config['MONGO_PORT'] = '27017'
 app.config['MONGO_DATABASE'] = 'my_database'
 
 mongo = MongoFlask(app)
-mongo.insert_collection('my_collection')
+mongo.register_collection(MyCollection)
+
 
 @app.route('/')
 def index():
     collection = mongo.get_collection('my_collection')
-    docs = collection.list_find()
+    docs = collection.all()
     return render_template('index.html', docs=docs)
 ```
 You can also use the `current_app` proxy class of Flask to use the MongoFlask instance as `current_app.mongo`. 
@@ -55,9 +61,6 @@ docs = collection.find()
 collection = current_app.mongo.collections['collection_name']
 docs = collection.find()
 ```
-4. Using the `db` attribute.
-```python
-collection = current_app.mongo.db['collection_name']
-docs = collection.find()
-```
-There are many more methods you can use to retrieve a collection from MongoFlask, it is up to you on which one you prefer. Refer to the methods doctrings for more information.
+
+There are many more methods you can use to retrieve a collection from MongoFlask, 
+it is up to you on which one you prefer. Refer to the methods doctrings for more information.

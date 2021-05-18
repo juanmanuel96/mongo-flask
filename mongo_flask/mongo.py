@@ -1,28 +1,19 @@
-from .wrappers import MongoConnect, MongoDatabase, MongoCollection
-from .exceptions import CollectionException, CollectionInvalid, URIMissing, DatabaseException
+from flask import Flask
 from pymongo.errors import OperationFailure
+
+from .core.wrappers import MongoConnect, MongoDatabase
+from .core.collections import CollectionModel
+from .errors import DatabaseException, CollectionException, CollectionInvalid, InvalidClass, RegistrationException
 
 
 class MongoFlask(object):
     def __init__(self, app=None):
         """
-        # MongoFlask
-        Connect a Flask application to your MongoDB client. The MongoFlask object 
-        has 3 attributes: client, db, and collections. 
+        Connect your MongoDB client to a Flask application. The MongoFlask object
+        has 3 attributes: client, db, and collection.
         1. `client` is the MongoDB instance in the computer.
         2. `db` is the Database to connect to.
-        3. `collections` is a dictrionary of all the collections in the database. 
-        
-        To use the functions of a collection it may be done as so:
-        ```python
-        current_app.mongo.collections['collection'].insert_one(insert)
-        ```
-        or
-        ```python
-        mongo.collections['collection'].insert_one(insert)
-        ```
-        :param app: Flask application instance
-        :type app: Flask
+        3. `collections` is a map of the collections of the DB
 
         ## Change log
         |Version|Description|
@@ -30,14 +21,26 @@ class MongoFlask(object):
         |v0.01  |Initial release of API|
         |v0.02  |Changes for ease of use|
         """
-        self.client = None  # MongoDB client
-        self.db = None  # Application database
-        self.collections = {}  # Database collections
+        self.__client = None  # MongoDB client
+        self.__db = None  # Application database
+        self.__collections = {}  # Database collections
 
-        if app is not None:
+        if app:
             # App is initialized if sent as parameter else, init_app 
             # has to be called
             self.init_app(app)
+
+    @property
+    def client(self):
+        return self.__client
+
+    @property
+    def db(self):
+        return self.__db
+
+    @property
+    def collections(self):
+        return self.__collections
 
     def init_app(self, app):
         """
@@ -59,10 +62,11 @@ class MongoFlask(object):
         conn = f'{host}:{port}'
         uri = f'mongodb://{account}{conn}'
         
-        self.client = MongoConnect(uri)
+        self.__client = MongoConnect(uri)
         self.__database__(db_name)
         
-        app.mongo = self # Create mongo attribute in Flask instance
+        if isinstance(app, Flask):  # Makes the package available to non-Flask projects
+            app.mongo = self  # Create mongo attribute in Flask instance
 
     def __database__(self, db_name=None):
         """
@@ -74,55 +78,56 @@ class MongoFlask(object):
         if db_name is None:
             raise DatabaseException()
 
-        self.db = MongoDatabase(self.client, db_name)
-        self.collections = self.__collections__()
-    
-    def __collections__(self):
+        self.__db = MongoDatabase(self.client, db_name)
+
+    def register_collection(self, collection_cls):
         """
-        Retrieves Collections in DB and inserts into collections attribute. If 
-        there are no collections, returns empty `dict`. Otherwise, creates a `dict`
-        object with instances of the collections.
+        Collection is a user-defined collection that will be added to the MongoFlask instance
         """
-        collections = self.db.list_collection_names()
-        if len(collections) == 0:
-            return {}
+        if issubclass(collection_cls, CollectionModel):
+            self.__register_collection(collection_cls)
         else:
-            col_dict = {}
-            for collection in collections:
-                col_dict[collection] = MongoCollection(self.db, collection)
-            return col_dict
-    
-    def insert_collection(self, collection_name = None):
+            raise InvalidClass(collection_cls)
+
+    def __register_collection(self, collection_cls):
+        _name = collection_cls.collection_name
+        _collection, success = self.__insert_collections__(_name, collection_cls)
+        _collection.client_session = self.__client.start_session
+        if not success:
+            raise RegistrationException()
+        self.__update_app()
+
+    def __insert_collections__(self, name, collection_cls: CollectionModel):
         """
         Inserts a new collection into the collections attribute. If collection does not
         exists, it is created.
-
-        :param collection_name: Name of the collection to be inserted
-        :param collection_name: str
         """
-        if collection_name is None:
-            raise CollectionException()
-
         try:
-            self.collections[collection_name] = MongoCollection(self.db, collection_name, create=True)
+            _collection = collection_cls(self.db, create=True)
         except OperationFailure:
-            self.collections[collection_name] = MongoCollection(self.db, collection_name)
-        return True
+            _collection = collection_cls(self.db)
+        self.__collections.update({name: _collection})
+        return _collection, self.collections.get(name) is not None
+
+    def __update_app(self):
+        try:
+            from flask import current_app
+            current_app.mongo = self
+        except RuntimeError as run_err:
+            """This app is not a Flask app, continuing without problems"""
+            pass
     
-    def get_collection(self, collection_name=None) -> MongoCollection:
+    def get_collection(self, collection_name=None) -> CollectionModel:
         """
         Retrieves a Collection instance from the collections attribute.
 
         :param collection_name: Name of the collection to be retrieved
         :type collection_name: str
         """
-        if collection_name is None:
-            raise CollectionException()
+        if not collection_name:
+            raise CollectionException(message='A collection name is required')
 
-        if self.collections.get(collection_name) is None:
+        collection_to_return = self.collections.get(collection_name)
+        if not collection_to_return:
             raise CollectionInvalid()
-        else:
-            return self.collections.get(collection_name)
-
-    def start_session(self, causal_consistency=True, default_transaction_options=None):
-        return self.client.start_session(causal_consistency, default_transaction_options)
+        return collection_to_return
