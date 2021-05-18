@@ -92,7 +92,7 @@ class MongoFlask(object):
     def __register_collection(self, collection_cls):
         _name = collection_cls.collection_name
         _collection, success = self.__insert_collections__(_name, collection_cls)
-        _collection.__client_session__ = self.__client.start_session
+        _collection.client_session = self.__client.start_session
         if not success:
             raise RegistrationException()
         self.__update_app()

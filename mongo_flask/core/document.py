@@ -27,18 +27,6 @@ class Document(dict):
     def __str__(self):
         return str(self._id)
 
-    def save(self):
-        changed_data = self.changed_data()
-        if changed_data:
-            # Update
-            self._update(changed_data)
-        else:
-            # Create
-            self._create()
-
-    def delete(self):
-        self.__collection.delete_one(self)
-
     def changed_data(self):
         """
         Returns a dictionary of the fields that changed. This is to be used for an update of the collection document.
@@ -52,12 +40,6 @@ class Document(dict):
             if value != self.cleaned_data[key]:
                 changed_data[key] = value
         return changed_data
-
-    def _update(self, update_data):
-        self.__collection.update_one({'_id': self._id}, update=update_data)
-
-    def _create(self):
-        self.__collection.insert_one(**self.cleaned_data)
 
 
 class DocumentSet(list):

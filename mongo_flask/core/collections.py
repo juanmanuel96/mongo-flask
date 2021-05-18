@@ -64,6 +64,18 @@ class BaseCollection(MongoCollection):
     def client_session(self):
         return self.__client_session__
 
+    @client_session.setter
+    def client_session(self, value):
+        self.__client_session__ = value
+
+    @property
+    def is_valid(self, raise_exep=False):
+        if raise_exep:
+            if self.errors:
+                raise Exception('Not Valid')
+        else:
+            return not self.errors
+
     def _set_document_fields(self, **_document) -> Document:
         _doc = {}
         for field in self.base_fields:
@@ -73,11 +85,7 @@ class BaseCollection(MongoCollection):
             _doc.update({name: field_class})
         return Document(self, **_doc)
 
-    @property
-    def is_valid(self):
-        return not self.errors
-
-    def find_limit(self, limit, *args, **kwargs):
+    def find_limit(self, limit, *args, **kwargs) -> DocumentSet:
         """
         Returns a list of the first docs found. The amount returned will be set
         by `limit`.
@@ -95,7 +103,7 @@ class BaseCollection(MongoCollection):
                 break
         return docu_set
 
-    def all(self):
+    def all(self) -> DocumentSet:
         docu_set = DocumentSet()
         cursor = super().find()
         for document in cursor:
@@ -103,7 +111,7 @@ class BaseCollection(MongoCollection):
             docu_set.append(_document)
         return docu_set
 
-    def filter(self, **kwargs):
+    def filter(self, **kwargs) -> DocumentSet:
         docu_set = DocumentSet()
         cursor = super().find(**kwargs)
         for document in cursor:
@@ -112,51 +120,44 @@ class BaseCollection(MongoCollection):
         return docu_set
 
     def get(self, **kwargs) -> Document:
-        kwargs = self._remove_session(**kwargs)
         _filter = dict(**kwargs)
-        with self.client_session() as session:
-            _document = super().find_one(_filter, session=session)
+        _document = super().find_one(_filter)
         data = _document if _document else {}
         document = self._set_document_fields(**data)
         return document
 
+    # TODO: Override method to return the created document object
     def insert_one(self, **kwargs):
-        kwargs = self._remove_session(**kwargs)
         _document = dict(**kwargs)
-        with self.client_session() as session:
-            super().insert_one(document=_document, session=session, **kwargs)
+        super().insert_one(document=_document, **kwargs)
 
-    def update_one(self, _filter: dict, update: dict, **kwargs):
-        kwargs = self._remove_session(**kwargs)
-        with self.client_session() as session:
-            _update = {'$set': update}
-            super().update_one(_filter, _update, session=session, **kwargs)
+    # TODO: Override method to return the updated document object
+    def update_one(self, document: Document, update: dict, **kwargs):
+        _update = {'$set': update}
+        super().update_one({'_id': str(document)}, _update, **kwargs)
 
     def delete_one(self, document: Document, **kwargs):
         kwargs = self._remove_session(**kwargs)
-        with self.client_session() as session:
-            super().delete_one({'_id': str(document)}, session=session, **kwargs)
+        super().delete_one({'_id': str(document)}, **kwargs)
 
-    def _remove_session(self, **kwargs):
-        if 'session' in kwargs.keys():
-            kwargs.pop('session')
-        return kwargs
-
-    def multiple_operation(self, pipeline=(), **kwargs):
+    def multiple_operation(self, pipeline=()):
         """
+        WIP
         This method allows the user to create a multiple operation sequence of queries. The sequence is established
         by the pipeline. The pipeline should be a tuple of dictionaries where the key is the method (i.e. insert_one)
         and the value are the parameters of the method.
 
-        Here is the structure for each method:
+        Here is the structure for each valid method:
         1) insert_one
             {'insert_one': {'field': 'value'}}
         2) update_one
             {'update_one': {
-                'filter': {'my_field': 'my_value'},
+                'doc': document,
                 'set' : {'my_field': 'my_value'}
                 }
             }
+        3) delete_one
+            {'delete_one' : document}
 
         How the pipeline is constructed is entirely up to the user, but the structure of the pipeline methods must
         follow the above guidelines.
@@ -164,7 +165,45 @@ class BaseCollection(MongoCollection):
         :param pipeline: Sequence of methods to run
         :type pipeline: tuple
         """
-        pass
+        valid_operations = ('insert_one', 'update_one', 'delete_one')
+        self._validate_pipeline(pipeline, valid_operations)
+        with self.client_session() as session:
+            with session.start_transaction():
+                try:
+                    for operation in pipeline:
+                        method = list(operation.keys())[0]
+                        params = list(operation.values())
+                        if method == 'update_one':
+                            op = getattr(self, method)
+                            op(document=params[0]['doc'], update=params[1]['set'], session=session)
+                        if method == 'insert_one':
+                            op = getattr(self, method)
+                            op(**params[0], session=session)
+                        if method == 'delete_one':
+                            op = getattr(self, method)
+                            op(document=params[0], session=session)
+                except Exception as err:  # If ANY error occurs, stop operation and end transaction
+                    session.abort_transaction()
+                    session.end_session()
+            session.commit_transaction()  # Commit the transaction
+            session.end_session()  # End the session
+        return session.has_ended()  # Return if the session has ended
+
+    def _validate_pipeline(self, pipeline: tuple, operations=()):
+        for method in pipeline:
+            if not isinstance(method, dict):
+                raise ValueError('Pipeline must be a list of dictionaries')
+            if method.keys() not in operations:
+                raise ValueError(f'Only the following are valid operations: {operations}')
+            if not isinstance(method.values(), dict):
+                raise ValueError('Method values must be dictionary')
+            if method == 'update_one':
+                if not isinstance(method['update_one'], dict):
+                    raise ValueError('update_one method must be a dictionary with filter and update data')
+                if not isinstance(method['update_one'].get('filter'), Document):
+                    raise ValueError('Filter must be of type Document')
+                if not isinstance(method['update_one'].get('set'), dict):
+                    raise ValueError('update_one set value must be of type dictionary')
 
 
 class CollectionModel(BaseCollection):
