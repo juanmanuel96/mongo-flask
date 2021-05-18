@@ -1,11 +1,6 @@
-mongo_flask/__pycache__/mongo.cpython-37.pyc
-mongo_flask/__pycache__/__init__.cpython-37.pyc
-mongo_flask/__pycache__/about.cpython-37.pyc
-mongo_flask/__pycache__/wrappers.cpython-37.pyc
-mongo_flask/__pycache__/helpers.cpython-37.pyc
-mongo_flask/__pycache__/expections.cpython-37.pyc
-mongo_flask/about.pyc
-mongo_flask/__init__.pyc
-mongo_flask/exceptions.pyc
-mongo_flask/__pycache__/exceptions.cpython-37.pyc
-__pycache__/tester.cpython-37-pytest-5.4.3.pyc
+mongo_flask/__pycache__/*
+mongo_flask/*.pyc
+__pycache__/
+
+build/
+mongo_flask.egg-info/
