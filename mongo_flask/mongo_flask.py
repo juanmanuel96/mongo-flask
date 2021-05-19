@@ -3,7 +3,8 @@ from pymongo.errors import OperationFailure
 
 from .core.wrappers import MongoConnect, MongoDatabase
 from .core.collections import CollectionModel
-from .errors import DatabaseException, CollectionException, CollectionInvalid, InvalidClass, RegistrationException
+from .errors import DatabaseException, CollectionException, CollectionInvalid, InvalidClass, RegistrationException, \
+    URIMissing
 
 
 class MongoFlask(object):
@@ -52,11 +53,17 @@ class MongoFlask(object):
         :param app: Flask instance of the application
         :type app: Flask
         """
-        host = app.config.get('MONGO_HOST', 'localhost')
-        port = app.config.get('MONGO_PORT', 27017)
-        username = app.config.get('MONGO_USER', None)
-        pwd = app.config.get('MONGO_PWD', None)
-        db_name = app.config.get('MONGO_DATABASE', None)
+        host = app.config.get('MONGO_HOST')
+        port = app.config.get('MONGO_PORT')
+        username = app.config.get('MONGO_USER')
+        pwd = app.config.get('MONGO_PWD')
+        db_name = app.config.get('MONGO_DATABASE')
+
+        if not host or not port:
+            raise URIMissing(
+                message=f'MONGO_HOST and MONGO_PORT cannot be "{type(None)}"',
+                fix='Provide a valid MONGO_HOST and MONGO_PORT value'
+            )
 
         account = f'{username}:{pwd}@' if username and pwd else ''
         conn = f'{host}:{port}'
@@ -85,19 +92,20 @@ class MongoFlask(object):
         Collection is a user-defined collection that will be added to the MongoFlask instance
         """
         if issubclass(collection_cls, CollectionModel):
-            self.__register_collection(collection_cls)
+            return self.__register_collection(collection_cls)
         else:
             raise InvalidClass(collection_cls)
 
     def __register_collection(self, collection_cls):
         _name = collection_cls.collection_name
-        _collection, success = self.__insert_collections__(_name, collection_cls)
+        _collection, success = self._insert_collection(_name, collection_cls)
         _collection.client_session = self.__client.start_session
         if not success:
             raise RegistrationException()
         self.__update_app()
+        return success
 
-    def __insert_collections__(self, name, collection_cls: CollectionModel):
+    def _insert_collection(self, name, collection_cls: CollectionModel):
         """
         Inserts a new collection into the collections attribute. If collection does not
         exists, it is created.
