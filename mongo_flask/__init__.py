@@ -30,7 +30,7 @@ from .errors import PyVersionInvalid
 if sys.version_info.major != __py_version__:
     raise PyVersionInvalid()
 
-from .mongo import MongoFlask
+from .mongo_flask import MongoFlask
 
 __all__ = (
     MongoFlask.__name__,

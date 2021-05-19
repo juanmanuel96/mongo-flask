@@ -38,7 +38,8 @@ class PyVersionInvalid(BaseMongoException):
 
 class URIMissing(BaseMongoException):
     status_code = 2
-    message = 'Must provide at least MONGO_HOST and MONGO_PORT in configuration'
+    message = 'MONGO_HOST and MONGO_PORT are required in configuration'
+    fix = 'Include MONGO_HOST and MONGO_PORT in configuration'
 
 
 class DatabaseException(BaseMongoException):
