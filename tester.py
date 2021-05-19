@@ -128,23 +128,68 @@ def test_collection_registration_invalid():
         mongo.register_collection(AnInvalidCollection)
 
 
-# TODO: From this point forward, collection registration must be included in test case
 def test_get_collection():
-    # app_config()
-    # collection = mongo.get_collection('testing')
-    # assert isinstance(collection, CollectionModel)
-    pass
+    app_config()
+    register_collection_for_test()
+    collection = mongo.get_collection('testing')
+    assert isinstance(collection, CollectionModel)
 
 
 def test_get_collection_without_name():
-    # app_config()
-    # with pytest.raises(CollectionException):
-    #     mongo.get_collection()
-    pass
+    app_config()
+    register_collection_for_test()
+    with pytest.raises(CollectionException):
+        mongo.get_collection()
 
 
 def test_get_collection_does_not_exist():
-    # app_config()
-    # with pytest.raises(CollectionInvalid):
-    #     mongo.get_collection('not_a_good_collection_name')
-    pass
+    app_config()
+    register_collection_for_test()
+    with pytest.raises(CollectionInvalid):
+        mongo.get_collection('not_a_good_collection_name')
+
+
+# Collection level operation tests
+def test_collection_method_all():
+    app_config()
+    register_collection_for_test()
+    collection = mongo.get_collection('testing')
+    docu_set = collection.all()
+    assert isinstance(docu_set, DocumentSet)
+
+
+def test_collection_method_all_correct_document_set_length():
+    """
+    This is a very specific test with a very specific length for the DocumentSet object. The purpose is to confirm
+    that it is returning a DocumentSet object and that the length of the object matches the amount of documents in the
+    'testing' collection. Later tests will validate the content of these documents.
+    """
+    app_config()
+    register_collection_for_test()
+    collection = mongo.get_collection('testing')
+    docu_set = collection.all()
+    assert len(docu_set) == 350
+
+
+def test_collection_method_filter():
+    app_config()
+    register_collection_for_test()
+    collection = mongo.get_collection('testing')
+    docu_set = collection.filter(desc='this is a test document')
+    assert isinstance(docu_set, DocumentSet) and isinstance(docu_set[0].desc, StringField)
+
+
+def test_collection_method_get():
+    app_config()
+    register_collection_for_test()
+    collection = mongo.get_collection('testing')
+    document = collection.get(doc_num='doc0')
+    assert isinstance(document, Document)
+
+
+def test_collection_method_get_empty():
+    app_config()
+    register_collection_for_test(Testing2)
+    collection = mongo.get_collection('testing2')
+    document = collection.get()  # Empty get should return Document object with empty fields
+    assert isinstance(document, Document)

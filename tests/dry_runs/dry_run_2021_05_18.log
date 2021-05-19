@@ -1,0 +1,207 @@
+Launching pytest with arguments /Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask/tester.py in /Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask
+
+##teamcity[enteredTheMatrix timestamp='2021-05-18T23:50:30.876']
+============================= test session starts ==============================
+platform darwin -- Python 3.7.4, pytest-5.4.3, py-1.9.0, pluggy-0.13.1 -- /Users/juanvazquez/PythonProjects/MongoFlask/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask
+collecting ... collected 17 items
+##teamcity[testCount timestamp='2021-05-18T23:50:31.075' count='17']
+
+tester.py::test_missing_complete_uri ##teamcity[testSuiteStarted timestamp='2021-05-18T23:50:31.076' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester' name='tester' nodeId='1' parentNodeId='0']
+##teamcity[testStarted timestamp='2021-05-18T23:50:31.077' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_missing_complete_uri' metainfo='test_missing_complete_uri' name='test_missing_complete_uri' nodeId='2' parentNodeId='1']
+FAILED                              [  5%]##teamcity[testFailed timestamp='2021-05-18T23:50:31.142' details='def test_missing_complete_uri():|n        app_config(host=None, port=None, db_name=None, init=False)|n        with pytest.raises(URIMissing):|n>           mongo.init_app(app)|n|ntester.py:64: |n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ |nmongo_flask/mongo.py:65: in init_app|n    self.__client = MongoConnect(uri)|n../venv/lib/python3.7/site-packages/pymongo/mongo_client.py:621: in __init__|n    connect_timeout=timeout)|n../venv/lib/python3.7/site-packages/pymongo/uri_parser.py:477: in parse_uri|n    nodes = split_hosts(hosts, default_port=default_port)|n../venv/lib/python3.7/site-packages/pymongo/uri_parser.py:326: in split_hosts|n    nodes.append(parse_host(entity, port))|n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ |n|nentity = |'None:None|', default_port = 27017|n|n    def parse_host(entity, default_port=DEFAULT_PORT):|n        """Validates a host string|n    |n        Returns a 2-tuple of host followed by port where port is default_port|n        if it wasn|'t specified in the string.|n    |n        :Parameters:|n            - `entity`: A host or host:port string where host could be a|n                        hostname or IP address.|n            - `default_port`: The port number to use when one wasn|'t|n                              specified in entity.|n        """|n        host = entity|n        port = default_port|n        if entity|[0|] == |'|[|':|n            host, port = parse_ipv6_literal_host(entity, default_port)|n        elif entity.endswith(".sock"):|n            return entity, default_port|n        elif entity.find(|':|') != -1:|n            if entity.count(|':|') > 1:|n                raise ValueError("Reserved characters such as |':|' must be "|n                                 "escaped according RFC 2396. An IPv6 "|n                                 "address literal must be enclosed in |'|[|' "|n                                 "and |'|]|' according to RFC 2732.")|n            host, port = host.split(|':|', 1)|n        if isinstance(port, string_type):|n            if not port.isdigit() or int(port) > 65535 or int(port) <= 0:|n                raise ValueError("Port must be an integer between 0 and 65535: %s"|n>                                % (port,))|nE               ValueError: Port must be an integer between 0 and 65535: None|n|n../venv/lib/python3.7/site-packages/pymongo/uri_parser.py:119: ValueError' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_missing_complete_uri' message='tester.py:60 (test_missing_complete_uri)' name='test_missing_complete_uri' nodeId='2' parentNodeId='1']
+##teamcity[testFinished timestamp='2021-05-18T23:50:31.142' duration='0' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_missing_complete_uri' name='test_missing_complete_uri' nodeId='2' parentNodeId='1']
+
+tester.py::test_missing_host ##teamcity[testStarted timestamp='2021-05-18T23:50:31.143' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_missing_host' metainfo='test_missing_host' name='test_missing_host' nodeId='3' parentNodeId='1']
+FAILED                                      [ 11%]##teamcity[testFailed timestamp='2021-05-18T23:50:31.149' details='def test_missing_host():|n        app_config(host=None, init=False)|n        with pytest.raises(URIMissing):|n>           mongo.init_app(app)|nE           Failed: DID NOT RAISE <class |'mongo_flask.errors.exceptions.URIMissing|'>|n|ntester.py:70: Failed' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_missing_host' message='tester.py:66 (test_missing_host)' name='test_missing_host' nodeId='3' parentNodeId='1']
+##teamcity[testFinished timestamp='2021-05-18T23:50:31.149' duration='1' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_missing_host' name='test_missing_host' nodeId='3' parentNodeId='1']
+
+tester.py::test_missing_port ##teamcity[testStarted timestamp='2021-05-18T23:50:31.149' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_missing_port' metainfo='test_missing_port' name='test_missing_port' nodeId='4' parentNodeId='1']
+FAILED                                      [ 17%]##teamcity[testFailed timestamp='2021-05-18T23:50:31.179' details='def test_missing_port():|n        app_config(port=None, init=False)|n        with pytest.raises(URIMissing):|n>           mongo.init_app(app)|n|ntester.py:76: |n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ |nmongo_flask/mongo.py:65: in init_app|n    self.__client = MongoConnect(uri)|n../venv/lib/python3.7/site-packages/pymongo/mongo_client.py:621: in __init__|n    connect_timeout=timeout)|n../venv/lib/python3.7/site-packages/pymongo/uri_parser.py:477: in parse_uri|n    nodes = split_hosts(hosts, default_port=default_port)|n../venv/lib/python3.7/site-packages/pymongo/uri_parser.py:326: in split_hosts|n    nodes.append(parse_host(entity, port))|n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ |n|nentity = |'localhost:None|', default_port = 27017|n|n    def parse_host(entity, default_port=DEFAULT_PORT):|n        """Validates a host string|n    |n        Returns a 2-tuple of host followed by port where port is default_port|n        if it wasn|'t specified in the string.|n    |n        :Parameters:|n            - `entity`: A host or host:port string where host could be a|n                        hostname or IP address.|n            - `default_port`: The port number to use when one wasn|'t|n                              specified in entity.|n        """|n        host = entity|n        port = default_port|n        if entity|[0|] == |'|[|':|n            host, port = parse_ipv6_literal_host(entity, default_port)|n        elif entity.endswith(".sock"):|n            return entity, default_port|n        elif entity.find(|':|') != -1:|n            if entity.count(|':|') > 1:|n                raise ValueError("Reserved characters such as |':|' must be "|n                                 "escaped according RFC 2396. An IPv6 "|n                                 "address literal must be enclosed in |'|[|' "|n                                 "and |'|]|' according to RFC 2732.")|n            host, port = host.split(|':|', 1)|n        if isinstance(port, string_type):|n            if not port.isdigit() or int(port) > 65535 or int(port) <= 0:|n                raise ValueError("Port must be an integer between 0 and 65535: %s"|n>                                % (port,))|nE               ValueError: Port must be an integer between 0 and 65535: None|n|n../venv/lib/python3.7/site-packages/pymongo/uri_parser.py:119: ValueError' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_missing_port' message='tester.py:72 (test_missing_port)' name='test_missing_port' nodeId='4' parentNodeId='1']
+##teamcity[testFinished timestamp='2021-05-18T23:50:31.179' duration='0' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_missing_port' name='test_missing_port' nodeId='4' parentNodeId='1']
+
+tester.py::test_missing_database ##teamcity[testStarted timestamp='2021-05-18T23:50:31.180' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_missing_database' metainfo='test_missing_database' name='test_missing_database' nodeId='5' parentNodeId='1']
+PASSED                                  [ 23%]##teamcity[testFinished timestamp='2021-05-18T23:50:31.181' duration='0' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_missing_database' name='test_missing_database' nodeId='5' parentNodeId='1']
+
+tester.py::test_app_mongo ##teamcity[testStarted timestamp='2021-05-18T23:50:31.182' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_app_mongo' metainfo='test_app_mongo' name='test_app_mongo' nodeId='6' parentNodeId='1']
+PASSED                                         [ 29%]##teamcity[testFinished timestamp='2021-05-18T23:50:31.184' duration='1' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_app_mongo' name='test_app_mongo' nodeId='6' parentNodeId='1']
+
+tester.py::test_client_type ##teamcity[testStarted timestamp='2021-05-18T23:50:31.185' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_client_type' metainfo='test_client_type' name='test_client_type' nodeId='7' parentNodeId='1']
+PASSED                                       [ 35%]##teamcity[testFinished timestamp='2021-05-18T23:50:31.186' duration='0' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_client_type' name='test_client_type' nodeId='7' parentNodeId='1']
+
+tester.py::test_database_type ##teamcity[testStarted timestamp='2021-05-18T23:50:31.187' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_database_type' metainfo='test_database_type' name='test_database_type' nodeId='8' parentNodeId='1']
+PASSED                                     [ 41%]##teamcity[testFinished timestamp='2021-05-18T23:50:31.188' duration='0' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_database_type' name='test_database_type' nodeId='8' parentNodeId='1']
+
+tester.py::test_collection_type ##teamcity[testStarted timestamp='2021-05-18T23:50:31.188' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_type' metainfo='test_collection_type' name='test_collection_type' nodeId='9' parentNodeId='1']
+PASSED                                   [ 47%]##teamcity[testFinished timestamp='2021-05-18T23:50:31.189' duration='0' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_type' name='test_collection_type' nodeId='9' parentNodeId='1']
+
+tester.py::test_collection_registration ##teamcity[testStarted timestamp='2021-05-18T23:50:31.190' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_registration' metainfo='test_collection_registration' name='test_collection_registration' nodeId='10' parentNodeId='1']
+PASSED                           [ 52%]##teamcity[testFinished timestamp='2021-05-18T23:50:31.346' duration='155' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_registration' name='test_collection_registration' nodeId='10' parentNodeId='1']
+
+tester.py::test_collection_registration_empty ##teamcity[testStarted timestamp='2021-05-18T23:50:31.346' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_registration_empty' metainfo='test_collection_registration_empty' name='test_collection_registration_empty' nodeId='11' parentNodeId='1']
+PASSED                     [ 58%]##teamcity[testFinished timestamp='2021-05-18T23:50:31.350' duration='3' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_registration_empty' name='test_collection_registration_empty' nodeId='11' parentNodeId='1']
+
+tester.py::test_collection_registration_not_in_db ##teamcity[testStarted timestamp='2021-05-18T23:50:31.351' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_registration_not_in_db' metainfo='test_collection_registration_not_in_db' name='test_collection_registration_not_in_db' nodeId='12' parentNodeId='1']
+PASSED                 [ 64%]##teamcity[testFinished timestamp='2021-05-18T23:50:31.352' duration='0' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_registration_not_in_db' name='test_collection_registration_not_in_db' nodeId='12' parentNodeId='1']
+
+tester.py::test_collection_registration_invalid ##teamcity[testStarted timestamp='2021-05-18T23:50:31.352' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_registration_invalid' metainfo='test_collection_registration_invalid' name='test_collection_registration_invalid' nodeId='13' parentNodeId='1']
+PASSED                   [ 70%]##teamcity[testFinished timestamp='2021-05-18T23:50:31.353' duration='0' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_registration_invalid' name='test_collection_registration_invalid' nodeId='13' parentNodeId='1']
+
+tester.py::test_get_collection ##teamcity[testStarted timestamp='2021-05-18T23:50:31.354' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_get_collection' metainfo='test_get_collection' name='test_get_collection' nodeId='14' parentNodeId='1']
+PASSED                                    [ 76%]##teamcity[testFinished timestamp='2021-05-18T23:50:31.358' duration='3' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_get_collection' name='test_get_collection' nodeId='14' parentNodeId='1']
+
+tester.py::test_get_collection_without_name ##teamcity[testStarted timestamp='2021-05-18T23:50:31.358' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_get_collection_without_name' metainfo='test_get_collection_without_name' name='test_get_collection_without_name' nodeId='15' parentNodeId='1']
+PASSED                       [ 82%]##teamcity[testFinished timestamp='2021-05-18T23:50:31.362' duration='3' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_get_collection_without_name' name='test_get_collection_without_name' nodeId='15' parentNodeId='1']
+
+tester.py::test_get_collection_does_not_exist ##teamcity[testStarted timestamp='2021-05-18T23:50:31.362' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_get_collection_does_not_exist' metainfo='test_get_collection_does_not_exist' name='test_get_collection_does_not_exist' nodeId='16' parentNodeId='1']
+PASSED                     [ 88%]##teamcity[testFinished timestamp='2021-05-18T23:50:31.366' duration='3' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_get_collection_does_not_exist' name='test_get_collection_does_not_exist' nodeId='16' parentNodeId='1']
+
+tester.py::test_collection_method_all ##teamcity[testStarted timestamp='2021-05-18T23:50:31.366' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_method_all' metainfo='test_collection_method_all' name='test_collection_method_all' nodeId='17' parentNodeId='1']
+PASSED                             [ 94%]##teamcity[testFinished timestamp='2021-05-18T23:50:31.389' duration='21' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_method_all' name='test_collection_method_all' nodeId='17' parentNodeId='1']
+
+tester.py::test_collection_method_all_correct_document_set_length ##teamcity[testStarted timestamp='2021-05-18T23:50:31.389' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_method_all_correct_document_set_length' metainfo='test_collection_method_all_correct_document_set_length' name='test_collection_method_all_correct_document_set_length' nodeId='18' parentNodeId='1']
+PASSED [100%]##teamcity[testFinished timestamp='2021-05-18T23:50:31.397' duration='7' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_method_all_correct_document_set_length' name='test_collection_method_all_correct_document_set_length' nodeId='18' parentNodeId='1']
+
+
+=================================== FAILURES ===================================
+__________________________ test_missing_complete_uri ___________________________
+
+    def test_missing_complete_uri():
+        app_config(host=None, port=None, db_name=None, init=False)
+        with pytest.raises(URIMissing):
+>           mongo.init_app(app)
+
+tester.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+mongo_flask/mongo.py:65: in init_app
+    self.__client = MongoConnect(uri)
+../venv/lib/python3.7/site-packages/pymongo/mongo_client.py:621: in __init__
+    connect_timeout=timeout)
+../venv/lib/python3.7/site-packages/pymongo/uri_parser.py:477: in parse_uri
+    nodes = split_hosts(hosts, default_port=default_port)
+../venv/lib/python3.7/site-packages/pymongo/uri_parser.py:326: in split_hosts
+    nodes.append(parse_host(entity, port))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+entity = 'None:None', default_port = 27017
+
+    def parse_host(entity, default_port=DEFAULT_PORT):
+        """Validates a host string
+    
+        Returns a 2-tuple of host followed by port where port is default_port
+        if it wasn't specified in the string.
+    
+        :Parameters:
+            - `entity`: A host or host:port string where host could be a
+                        hostname or IP address.
+            - `default_port`: The port number to use when one wasn't
+                              specified in entity.
+        """
+        host = entity
+        port = default_port
+        if entity[0] == '[':
+            host, port = parse_ipv6_literal_host(entity, default_port)
+        elif entity.endswith(".sock"):
+            return entity, default_port
+        elif entity.find(':') != -1:
+            if entity.count(':') > 1:
+                raise ValueError("Reserved characters such as ':' must be "
+                                 "escaped according RFC 2396. An IPv6 "
+                                 "address literal must be enclosed in '[' "
+                                 "and ']' according to RFC 2732.")
+            host, port = host.split(':', 1)
+        if isinstance(port, string_type):
+            if not port.isdigit() or int(port) > 65535 or int(port) <= 0:
+                raise ValueError("Port must be an integer between 0 and 65535: %s"
+>                                % (port,))
+E               ValueError: Port must be an integer between 0 and 65535: None
+
+../venv/lib/python3.7/site-packages/pymongo/uri_parser.py:119: ValueError
+______________________________ test_missing_host _______________________________
+
+    def test_missing_host():
+        app_config(host=None, init=False)
+        with pytest.raises(URIMissing):
+>           mongo.init_app(app)
+E           Failed: DID NOT RAISE <class 'mongo_flask.errors.exceptions.URIMissing'>
+
+tester.py:70: Failed
+______________________________ test_missing_port _______________________________
+
+    def test_missing_port():
+        app_config(port=None, init=False)
+        with pytest.raises(URIMissing):
+>           mongo.init_app(app)
+
+tester.py:76: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+mongo_flask/mongo.py:65: in init_app
+    self.__client = MongoConnect(uri)
+../venv/lib/python3.7/site-packages/pymongo/mongo_client.py:621: in __init__
+    connect_timeout=timeout)
+../venv/lib/python3.7/site-packages/pymongo/uri_parser.py:477: in parse_uri
+    nodes = split_hosts(hosts, default_port=default_port)
+../venv/lib/python3.7/site-packages/pymongo/uri_parser.py:326: in split_hosts
+    nodes.append(parse_host(entity, port))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+entity = 'localhost:None', default_port = 27017
+
+    def parse_host(entity, default_port=DEFAULT_PORT):
+        """Validates a host string
+    
+        Returns a 2-tuple of host followed by port where port is default_port
+        if it wasn't specified in the string.
+    
+        :Parameters:
+            - `entity`: A host or host:port string where host could be a
+                        hostname or IP address.
+            - `default_port`: The port number to use when one wasn't
+                              specified in entity.
+        """
+        host = entity
+        port = default_port
+        if entity[0] == '[':
+            host, port = parse_ipv6_literal_host(entity, default_port)
+        elif entity.endswith(".sock"):
+            return entity, default_port
+        elif entity.find(':') != -1:
+            if entity.count(':') > 1:
+                raise ValueError("Reserved characters such as ':' must be "
+                                 "escaped according RFC 2396. An IPv6 "
+                                 "address literal must be enclosed in '[' "
+                                 "and ']' according to RFC 2732.")
+            host, port = host.split(':', 1)
+        if isinstance(port, string_type):
+            if not port.isdigit() or int(port) > 65535 or int(port) <= 0:
+                raise ValueError("Port must be an integer between 0 and 65535: %s"
+>                                % (port,))
+E               ValueError: Port must be an integer between 0 and 65535: None
+
+../venv/lib/python3.7/site-packages/pymongo/uri_parser.py:119: ValueError
+=============================== warnings summary ===============================
+tester.py:15
+  /Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask/tester.py:15: PytestCollectionWarning: cannot collect test class 'Testing' because it has a __init__ constructor (from: tester.py)
+    class Testing(CollectionModel):
+
+tester.py:22
+  /Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask/tester.py:22: PytestCollectionWarning: cannot collect test class 'Testing2' because it has a __init__ constructor (from: tester.py)
+    class Testing2(CollectionModel):
+
+tester.py:30
+  /Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask/tester.py:30: PytestCollectionWarning: cannot collect test class 'Testing3' because it has a __init__ constructor (from: tester.py)
+    class Testing3(CollectionModel):
+
+-- Docs: https://docs.pytest.org/en/latest/warnings.html
+=========================== short test summary info ============================
+FAILED tester.py::test_missing_complete_uri - ValueError: Port must be an int...
+FAILED tester.py::test_missing_host - Failed: DID NOT RAISE <class 'mongo_fla...
+FAILED tester.py::test_missing_port - ValueError: Port must be an integer bet...
+=================== 3 failed, 14 passed, 3 warnings in 0.52s ===================
+
+
+TODO:
+    - Fix error where MONGO_HOST and MONGO_PORT can be NoneType. None is not a valid value.
+    - MongoFlask method register_collection should return some value which can be evaluated such as
+    a boolean
