@@ -184,7 +184,7 @@ def test_collection_method_get():
     register_collection_for_test()
     collection = mongo.get_collection('testing')
     document = collection.get(doc_num='doc0')
-    assert isinstance(document, Document) and isinstance(document.doc_num, StringField)
+    assert isinstance(document, Document) and isinstance(document.get('doc_num'), StringField)
 
 
 def test_collection_method_get_empty():
