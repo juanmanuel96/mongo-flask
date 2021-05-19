@@ -176,7 +176,7 @@ def test_collection_method_filter():
     register_collection_for_test()
     collection = mongo.get_collection('testing')
     docu_set = collection.filter(desc='this is a test document')
-    assert isinstance(docu_set, DocumentSet) and isinstance(docu_set[0].desc, StringField)
+    assert isinstance(docu_set, DocumentSet) and isinstance(docu_set[0]['desc'], StringField)
 
 
 def test_collection_method_get():
