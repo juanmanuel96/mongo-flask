@@ -85,6 +85,9 @@ class BaseCollection(MongoCollection):
             _doc.update({name: field_class})
         return Document(self, **_doc)
 
+    ##########
+    # Collection operations
+    ##########
     def find_limit(self, limit, *args, **kwargs) -> DocumentSet:
         """
         Returns a list of the first docs found. The amount returned will be set
@@ -95,7 +98,10 @@ class BaseCollection(MongoCollection):
         """
         docu_set = DocumentSet()
         int(limit)
-        cursor = super().find(*args, **kwargs)
+        _filter = {}
+        if kwargs:
+            _filter = dict(**kwargs)
+        cursor = super().find(*args, _filter)
         for idx, document in enumerate(cursor):
             _document = self._set_document_fields(**document)
             docu_set.append(_document)
@@ -113,7 +119,8 @@ class BaseCollection(MongoCollection):
 
     def filter(self, **kwargs) -> DocumentSet:
         docu_set = DocumentSet()
-        cursor = super().find(**kwargs)
+        _filter = dict(**kwargs)
+        cursor = super().find(_filter)
         for document in cursor:
             _document = self._set_document_fields(**document)
             docu_set.append(_document)

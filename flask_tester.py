@@ -13,13 +13,13 @@ mongo = MongoFlask(app)
 
 
 class Testing(CollectionModel):
-    collection_name = None
+    collection_name = 'testing'
     doc_num = StringField()
     desc = StringField()
 
 
 mongo.register_collection(Testing)
-collection = mongo.get_collection('testing2')
+collection = mongo.get_collection('testing')
 
-doc_found = collection.get()
-print(doc_found)
+docs_found = collection.filter(desc='this is a test document')
+print(docs_found)
