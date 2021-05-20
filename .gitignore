@@ -4,5 +4,6 @@ __pycache__/
 
 build/
 mongo_flask.egg-info/
+dist/
 .pytest_cache/
 test/private_run/
