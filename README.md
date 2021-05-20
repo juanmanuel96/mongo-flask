@@ -1,20 +1,26 @@
-# Mongo-Flask
-A Python Flask library for connecting a MongoDB instance to the Flask application.
+# MongoFlask
+A Python Flask library for connecting a MongoDB instance to a Flask application.
 
-## How to use
-Module is not available in pip yet. You will need to download the source code. Copy the `mongo-flask` package 
-under `yourapplication` folder. From there on out, just call the MongoFlask class in your application.
+## Installation
+Module is not available in PyPI yet. However, you can install it with pip with the following command via ssh:
+```
+pip install git+ssh://git@github.com/juanmanuel96/mongo-flask.git
+```
+To install via HTTPS:
+```
+pip install git+https://git@github.com/juanmanuel96/mongo-flask.git
+```
 
-### Application Configuration
+## Application Configuration
 Upon creation of the application, you need to set the following Flask application configuration variables:
-1. MONGO_HOST = MongoDB connection host IP or domain. **Required**
-2. MONGO_PORT = MongoDB connection port. **Required**
-3. MONGO_DATABASE = MongoDB database of the application **Required**
-4. MONGO_USER = MongoDB connection username (optional)
-5. MONGO_PWD = MongoDB connection password (optional) 
-**NOTE:** If MONGO_USER is provided, MONGO_PWD will be required.
+1. `MONGO_HOST` = MongoDB connection host IP or domain. **Required**
+2. `MONGO_PORT` = MongoDB connection port. **Required**
+3. `MONGO_DATABASE` = MongoDB database of the application **Required**
+4. `MONGO_USER` = MongoDB connection username (optional)
+5. `MONGO_PWD` = MongoDB connection password (optional) 
+**NOTE:** If `MONGO_USER` is provided, `MONGO_PWD` will be required.
 
-### Quick Start to MongoFlask
+## Quick Start
 This section details a quick start to the MongoFlask class.
 ```python
 from flask import Flask, render_template
@@ -39,28 +45,51 @@ mongo.register_collection(MyCollection)
 @app.route('/')
 def index():
     collection = mongo.get_collection('my_collection')
-    docs = collection.all()
-    return render_template('index.html', docs=docs)
-```
-You can also use the `current_app` proxy class of Flask to use the MongoFlask instance as `current_app.mongo`. 
-
-### Methods to get a Collection
-The MongoFlask instance has an attribute called collections. This attribute is a dictionary where the keys are the collection names and their values are the Collection instances. The following are methods to retrieve a collection from the MongoFlask instance.
-1. Using the `get_collection()` method from the `MongoFlask` class . **Recommended**
-```python
-collection = current_app.mongo.get_collection('collection_name')
-docs = collection.find()
+    document_set = collection.all()
+    return render_template('index.html', document_set=document_set)
 ``` 
-2. Using the `get()` method from the `dict()` class.
+
+## Using MongoFlask
+The MongoFlask class can be instantiated as `mongo = MongoFlask`. To connect the instance to a Flask app, it can be 
+done by passing the application as a parameter of MongoFlask or by calling the `MongoFlask.init_app` method and passing 
+the Flask application as parameter. After MongoFlask has been instantiated and a Flask app has been connected, proceed 
+by creation collection DRM object. 
+
+### Creating a Collection DRM object
+This package implements a sort of ORM which we call DRM, Document Relational Mapping. A DRM object is a representation 
+a database collection. Usually it should have the same name as the collection, but it is not a requirement. However, 
+it should have a `collection_name` attribute which should be the name of the collection in the database as-is. here is 
+how you can create a Collection DRM object.
 ```python
-collection = current_app.mongo.collections.get('collction_name')
-docs = collection.find()
-``` 
-3. Using dictonary brackets.
+from mongo_flask.core.collections import CollectionModel
+from mongo_flask.core.fields import StringField, IntegerField
+
+class MyCollection(CollectionModel):
+    collection_name = 'my_collection'
+    name = StringField(required=True, max_lenght=50)
+    age = IntegerField()
+```
+When the Collection DRM object has been created, it should be registered in the `MongoFlask` instance for use.
+
+### Registering a collection
+In the same file where `MongoFlask` was instantiated, call the method `register_collection` and pass the collection 
+class (not instance), as parameter.
 ```python
-collection = current_app.mongo.collections['collection_name']
-docs = collection.find()
+mongo.regsiter_collection(MyCollection)
 ```
 
-There are many more methods you can use to retrieve a collection from MongoFlask, 
-it is up to you on which one you prefer. Refer to the methods doctrings for more information.
+### Retrieving a collection for use
+To retrieve a collection DRM, you may do this by using the `MongoFlask` instance directly, or through the Flask app, 
+and calling the `get_collection` method. This method expects the collection name as parameter (not the collection 
+class).  
+```python
+# To retrieve from the MongoFlask instance
+collection = mongo.get_collection('my_collection')
+
+# To retrieve from the Flask app
+app.mongo.get_collection('my_collection')
+```
+
+## For further documentation
+Documentation on the class is being developed.
+
