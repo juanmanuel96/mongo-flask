@@ -25,12 +25,12 @@
 
 import sys
 from .about import __author__, __py_version__, __url__, __version__, __description__
-from .exceptions import PyVersionInvalid
+from .errors import PyVersionInvalid
 
 if sys.version_info.major != __py_version__:
     raise PyVersionInvalid()
 
-from .mongo import MongoFlask
+from .mongo_flask import MongoFlask
 
 __all__ = (
     MongoFlask.__name__,
