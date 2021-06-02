@@ -168,7 +168,7 @@ def test_collection_method_all_correct_document_set_length():
     register_collection_for_test()
     collection = mongo.get_collection('testing')
     docu_set = collection.all()
-    assert len(docu_set) == 350
+    assert len(docu_set) == collection.count_documents({})
 
 
 def test_collection_method_filter():
@@ -193,3 +193,11 @@ def test_collection_method_get_empty():
     collection = mongo.get_collection('testing2')
     document = collection.get()  # Empty get should return Document object with empty fields
     assert isinstance(document, Document)
+
+
+def test_collection_method_insert_one():
+    app_config()
+    register_collection_for_test(Testing)
+    collection = mongo.get_collection('testing')
+    insert = collection.insert_one(doc_num='doc500', desc='Some text for test')
+    assert insert.acknowledged

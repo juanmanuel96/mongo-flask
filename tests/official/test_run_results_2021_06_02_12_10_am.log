@@ -1,0 +1,90 @@
+Launching pytest with arguments /Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask/tester.py in /Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask
+
+##teamcity[enteredTheMatrix timestamp='2021-06-02T00:09:36.027']
+============================= test session starts ==============================
+platform darwin -- Python 3.7.4, pytest-5.4.3, py-1.9.0, pluggy-0.13.1 -- /Users/juanvazquez/PythonProjects/MongoFlask/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask
+collecting ... collected 21 items
+##teamcity[testCount timestamp='2021-06-02T00:09:36.252' count='21']
+
+tester.py::test_missing_complete_uri ##teamcity[testSuiteStarted timestamp='2021-06-02T00:09:36.253' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester' name='tester' nodeId='1' parentNodeId='0']
+##teamcity[testStarted timestamp='2021-06-02T00:09:36.253' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_missing_complete_uri' metainfo='test_missing_complete_uri' name='test_missing_complete_uri' nodeId='2' parentNodeId='1']
+PASSED                              [  4%]##teamcity[testFinished timestamp='2021-06-02T00:09:36.254' duration='0' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_missing_complete_uri' name='test_missing_complete_uri' nodeId='2' parentNodeId='1']
+
+tester.py::test_missing_host ##teamcity[testStarted timestamp='2021-06-02T00:09:36.255' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_missing_host' metainfo='test_missing_host' name='test_missing_host' nodeId='3' parentNodeId='1']
+PASSED                                      [  9%]##teamcity[testFinished timestamp='2021-06-02T00:09:36.255' duration='0' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_missing_host' name='test_missing_host' nodeId='3' parentNodeId='1']
+
+tester.py::test_missing_port ##teamcity[testStarted timestamp='2021-06-02T00:09:36.256' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_missing_port' metainfo='test_missing_port' name='test_missing_port' nodeId='4' parentNodeId='1']
+PASSED                                      [ 14%]##teamcity[testFinished timestamp='2021-06-02T00:09:36.256' duration='0' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_missing_port' name='test_missing_port' nodeId='4' parentNodeId='1']
+
+tester.py::test_missing_database ##teamcity[testStarted timestamp='2021-06-02T00:09:36.257' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_missing_database' metainfo='test_missing_database' name='test_missing_database' nodeId='5' parentNodeId='1']
+PASSED                                  [ 19%]##teamcity[testFinished timestamp='2021-06-02T00:09:36.258' duration='0' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_missing_database' name='test_missing_database' nodeId='5' parentNodeId='1']
+
+tester.py::test_app_mongo ##teamcity[testStarted timestamp='2021-06-02T00:09:36.258' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_app_mongo' metainfo='test_app_mongo' name='test_app_mongo' nodeId='6' parentNodeId='1']
+PASSED                                         [ 23%]##teamcity[testFinished timestamp='2021-06-02T00:09:36.260' duration='0' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_app_mongo' name='test_app_mongo' nodeId='6' parentNodeId='1']
+
+tester.py::test_client_type ##teamcity[testStarted timestamp='2021-06-02T00:09:36.261' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_client_type' metainfo='test_client_type' name='test_client_type' nodeId='7' parentNodeId='1']
+PASSED                                       [ 28%]##teamcity[testFinished timestamp='2021-06-02T00:09:36.262' duration='0' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_client_type' name='test_client_type' nodeId='7' parentNodeId='1']
+
+tester.py::test_database_type ##teamcity[testStarted timestamp='2021-06-02T00:09:36.262' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_database_type' metainfo='test_database_type' name='test_database_type' nodeId='8' parentNodeId='1']
+PASSED                                     [ 33%]##teamcity[testFinished timestamp='2021-06-02T00:09:36.263' duration='0' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_database_type' name='test_database_type' nodeId='8' parentNodeId='1']
+
+tester.py::test_collection_type ##teamcity[testStarted timestamp='2021-06-02T00:09:36.264' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_type' metainfo='test_collection_type' name='test_collection_type' nodeId='9' parentNodeId='1']
+PASSED                                   [ 38%]##teamcity[testFinished timestamp='2021-06-02T00:09:36.265' duration='0' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_type' name='test_collection_type' nodeId='9' parentNodeId='1']
+
+tester.py::test_collection_registration ##teamcity[testStarted timestamp='2021-06-02T00:09:36.265' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_registration' metainfo='test_collection_registration' name='test_collection_registration' nodeId='10' parentNodeId='1']
+PASSED                           [ 42%]##teamcity[testFinished timestamp='2021-06-02T00:09:36.270' duration='3' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_registration' name='test_collection_registration' nodeId='10' parentNodeId='1']
+
+tester.py::test_collection_registration_empty ##teamcity[testStarted timestamp='2021-06-02T00:09:36.270' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_registration_empty' metainfo='test_collection_registration_empty' name='test_collection_registration_empty' nodeId='11' parentNodeId='1']
+PASSED                     [ 47%]##teamcity[testFinished timestamp='2021-06-02T00:09:36.273' duration='2' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_registration_empty' name='test_collection_registration_empty' nodeId='11' parentNodeId='1']
+
+tester.py::test_collection_registration_not_in_db ##teamcity[testStarted timestamp='2021-06-02T00:09:36.274' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_registration_not_in_db' metainfo='test_collection_registration_not_in_db' name='test_collection_registration_not_in_db' nodeId='12' parentNodeId='1']
+PASSED                 [ 52%]##teamcity[testFinished timestamp='2021-06-02T00:09:36.275' duration='0' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_registration_not_in_db' name='test_collection_registration_not_in_db' nodeId='12' parentNodeId='1']
+
+tester.py::test_collection_registration_invalid ##teamcity[testStarted timestamp='2021-06-02T00:09:36.275' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_registration_invalid' metainfo='test_collection_registration_invalid' name='test_collection_registration_invalid' nodeId='13' parentNodeId='1']
+PASSED                   [ 57%]##teamcity[testFinished timestamp='2021-06-02T00:09:36.277' duration='0' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_registration_invalid' name='test_collection_registration_invalid' nodeId='13' parentNodeId='1']
+
+tester.py::test_get_collection ##teamcity[testStarted timestamp='2021-06-02T00:09:36.277' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_get_collection' metainfo='test_get_collection' name='test_get_collection' nodeId='14' parentNodeId='1']
+PASSED                                    [ 61%]##teamcity[testFinished timestamp='2021-06-02T00:09:36.280' duration='2' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_get_collection' name='test_get_collection' nodeId='14' parentNodeId='1']
+
+tester.py::test_get_collection_without_name ##teamcity[testStarted timestamp='2021-06-02T00:09:36.281' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_get_collection_without_name' metainfo='test_get_collection_without_name' name='test_get_collection_without_name' nodeId='15' parentNodeId='1']
+PASSED                       [ 66%]##teamcity[testFinished timestamp='2021-06-02T00:09:36.284' duration='2' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_get_collection_without_name' name='test_get_collection_without_name' nodeId='15' parentNodeId='1']
+
+tester.py::test_get_collection_does_not_exist ##teamcity[testStarted timestamp='2021-06-02T00:09:36.285' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_get_collection_does_not_exist' metainfo='test_get_collection_does_not_exist' name='test_get_collection_does_not_exist' nodeId='16' parentNodeId='1']
+PASSED                     [ 71%]##teamcity[testFinished timestamp='2021-06-02T00:09:36.289' duration='3' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_get_collection_does_not_exist' name='test_get_collection_does_not_exist' nodeId='16' parentNodeId='1']
+
+tester.py::test_collection_method_all ##teamcity[testStarted timestamp='2021-06-02T00:09:36.289' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_method_all' metainfo='test_collection_method_all' name='test_collection_method_all' nodeId='17' parentNodeId='1']
+PASSED                             [ 76%]##teamcity[testFinished timestamp='2021-06-02T00:09:36.297' duration='6' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_method_all' name='test_collection_method_all' nodeId='17' parentNodeId='1']
+
+tester.py::test_collection_method_all_correct_document_set_length ##teamcity[testStarted timestamp='2021-06-02T00:09:36.298' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_method_all_correct_document_set_length' metainfo='test_collection_method_all_correct_document_set_length' name='test_collection_method_all_correct_document_set_length' nodeId='18' parentNodeId='1']
+PASSED [ 80%]##teamcity[testFinished timestamp='2021-06-02T00:09:36.307' duration='8' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_method_all_correct_document_set_length' name='test_collection_method_all_correct_document_set_length' nodeId='18' parentNodeId='1']
+
+tester.py::test_collection_method_filter ##teamcity[testStarted timestamp='2021-06-02T00:09:36.307' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_method_filter' metainfo='test_collection_method_filter' name='test_collection_method_filter' nodeId='19' parentNodeId='1']
+PASSED                          [ 85%]##teamcity[testFinished timestamp='2021-06-02T00:09:36.316' duration='8' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_method_filter' name='test_collection_method_filter' nodeId='19' parentNodeId='1']
+
+tester.py::test_collection_method_get ##teamcity[testStarted timestamp='2021-06-02T00:09:36.316' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_method_get' metainfo='test_collection_method_get' name='test_collection_method_get' nodeId='20' parentNodeId='1']
+PASSED                             [ 90%]##teamcity[testFinished timestamp='2021-06-02T00:09:36.321' duration='3' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_method_get' name='test_collection_method_get' nodeId='20' parentNodeId='1']
+
+tester.py::test_collection_method_get_empty ##teamcity[testStarted timestamp='2021-06-02T00:09:36.321' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_method_get_empty' metainfo='test_collection_method_get_empty' name='test_collection_method_get_empty' nodeId='21' parentNodeId='1']
+PASSED                       [ 95%]##teamcity[testFinished timestamp='2021-06-02T00:09:36.325' duration='3' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_method_get_empty' name='test_collection_method_get_empty' nodeId='21' parentNodeId='1']
+
+tester.py::test_collection_method_insert_one ##teamcity[testStarted timestamp='2021-06-02T00:09:36.326' captureStandardOutput='false' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_method_insert_one' metainfo='test_collection_method_insert_one' name='test_collection_method_insert_one' nodeId='22' parentNodeId='1']
+PASSED                      [100%]##teamcity[testFinished timestamp='2021-06-02T00:09:36.331' duration='4' locationHint='python</Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask>://tester.test_collection_method_insert_one' name='test_collection_method_insert_one' nodeId='22' parentNodeId='1']
+
+
+=============================== warnings summary ===============================
+tester.py:15
+  /Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask/tester.py:15: PytestCollectionWarning: cannot collect test class 'Testing' because it has a __init__ constructor (from: tester.py)
+    class Testing(CollectionModel):
+
+tester.py:22
+  /Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask/tester.py:22: PytestCollectionWarning: cannot collect test class 'Testing2' because it has a __init__ constructor (from: tester.py)
+    class Testing2(CollectionModel):
+
+tester.py:30
+  /Users/juanvazquez/PythonProjects/MongoFlask/mongo-flask/tester.py:30: PytestCollectionWarning: cannot collect test class 'Testing3' because it has a __init__ constructor (from: tester.py)
+    class Testing3(CollectionModel):
+
+-- Docs: https://docs.pytest.org/en/latest/warnings.html
+======================== 21 passed, 3 warnings in 0.30s ========================
