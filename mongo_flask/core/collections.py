@@ -136,16 +136,16 @@ class BaseCollection(MongoCollection):
     # TODO: Override method to return the created document object
     def insert_one(self, session=None, **kwargs):
         _document = dict(**kwargs)
-        super().insert_one(document=_document, session=session)
+        return super().insert_one(document=_document, session=session)
 
     # TODO: Override method to return the updated document object
     def update_one(self, document: Document, update: dict, **kwargs):
         _update = {'$set': update}
-        super().update_one({'_id': str(document)}, _update, **kwargs)
+        return super().update_one({'_id': str(document)}, _update, **kwargs)
 
     def delete_one(self, document: Document, **kwargs):
         kwargs = self._remove_session(**kwargs)
-        super().delete_one({'_id': str(document)}, **kwargs)
+        return super().delete_one({'_id': str(document)}, **kwargs)
 
     def multiple_operation(self, pipeline=()):
         """
