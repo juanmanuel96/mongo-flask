@@ -134,9 +134,9 @@ class BaseCollection(MongoCollection):
         return document
 
     # TODO: Override method to return the created document object
-    def insert_one(self, **kwargs):
+    def insert_one(self, session=None, **kwargs):
         _document = dict(**kwargs)
-        super().insert_one(document=_document, **kwargs)
+        super().insert_one(document=_document, session=session)
 
     # TODO: Override method to return the updated document object
     def update_one(self, document: Document, update: dict, **kwargs):
